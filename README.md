@@ -15,5 +15,6 @@ Now, upon building the basic framework in such short time, I have added some new
 3. Clean inputs and use NLP to parse the recipe instructions into steps
 4. Connect to an LLM API to describe the mood and desires and have a recipe recommendation to be added to the cookbook
 5. Filter by cuisines
+6. User Account interface so each account can save recipes to their cookbook, add recipes to master database
 
 I'm sure the list will keep growing. Stay tuned! 
