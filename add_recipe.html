@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add your Recipe to the Cookbook!</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e6f7ff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        form {
+            width: 80%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="radio"] {
+            margin-bottom: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button,
+        input[type="submit"] {
+            padding: 10px;
+            background-color: lightsteelblue;
+            color: black;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        input[type="submit"] {
+            padding: 15px;
+            background-color: #005bb5;
+            color: white;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        input[type="submit"]:hover,
+        button:hover {
+            background-color: #003366;
+        }
+
+        #steps-container {
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        #ingredient-container {
+            display: flex;
+            align-items: center;
+        }
+
+        #ingredient-container div {
+            margin-right: 10px;
+        }
+
+        #steps-container textarea {
+            margin-bottom: 8px;
+        }
+
+        #ingredient-container .ingredient-entry {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        #ingredient-container .ingredient-entry label {
+            display: flex;
+            text-align: left;
+            margin-right: 10px;
+        }
+
+        #ingredient-container .ingredient-entry input {
+            flex: 2;
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            margin-bottom: 8px;
+            flex-direction: row;
+        }
+
+    </style>
+    </style>
+    <script>
+        // JavaScript to dynamically add/remove ingredient fields
+        let ingredientCounter = 2;
+        function addIngredientField() {
+            const ingredientContainer = document.getElementById('ingredient-container');
+            const newIngredientField = document.createElement('div');
+            newIngredientField.innerHTML = `
+                <span class="ingredient-label">${ingredientCounter}.</span>
+                <label for="ingredient">Ingredient:</label>
+                <input type="text" name="ingredients[]" required>
+
+                <label for="quantity">Quantity:</label>
+                <input type="text" name="quantities[]" required>
+
+                <label for="unit">Unit:</label>
+                <input type="text" name="units[]" required>
+
+                <button type="button" onclick="removeIngredientField(this)">Remove</button>
+            `;
+            ingredientContainer.appendChild(newIngredientField);
+            ingredientCounter++;
+        }
+
+        function removeIngredientField(button) {
+            const ingredientContainer = document.getElementById('ingredient-container');
+            ingredientContainer.removeChild(button.parentNode);
+            ingredientCounter--;
+        }
+
+        let stepCounter = 2;
+        function addStepField() {
+            const stepsContainer = document.getElementById('steps-container');
+            const newStepField = document.createElement('div');
+            newStepField.innerHTML = `
+            <span class="step-label">${stepCounter}.</span>
+            <textarea name="steps[]" rows="1" required></textarea>
+            <button type="button" onclick="removeStepField(this)">Remove</button>
+        `;
+            stepsContainer.appendChild(newStepField);
+            stepCounter++;
+        }
+
+        function removeStepField(button) {
+            const stepsContainer = document.getElementById('steps-container');
+            stepsContainer.removeChild(button.parentNode);
+            stepCounter--;
+        }
+        // Additional JavaScript to check if servings is positive
+        document.getElementById('servingsInput').addEventListener('input', function () {
+            var servings = parseInt(this.value);
+
+            if (isNaN(servings) || servings <= 0) {
+                document.getElementById('servingsError').textContent = 'Servings must be a positive integer.';
+                document.getElementById('servingsInput').setCustomValidity('Servings must be a positive integer.');
+            } else {
+                document.getElementById('servingsError').textContent = '';
+                document.getElementById('servingsInput').setCustomValidity('');
+            }
+
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Add your Recipe to the Cookbook!</h1>
+    <form method="POST" action="{{ url_for('add_recipe') }}">
+        <label for="recipe_type">Recipe Type:</label>
+        <div>
+            <input type="radio" name="recipe_type" value="Breakfast"> Breakfast
+            <input type="radio" name="recipe_type" value="Snack"> Snack
+            <input type="radio" name="recipe_type" value="Dinner"> Dinner
+            <input type="radio" name="recipe_type" value="Lunch"> Lunch
+            <input type="radio" name="recipe_type" value="Dessert"> Dessert
+            <input type="radio" name="recipe_type" value="Side"> Side
+
+        </div>
+
+        <!-- these values I will be "getting" through text from the form-->
+
+        <label for="name">Recipe Name:</label>
+        <input type="text" name="name" required><br>
+        <label for="description">Description:</label>
+        <textarea name="description"></textarea><br>
+        <label for="servings">Servings:</label>
+        <input type="number" name="servings" required><br>
+        <span id="servingsError" style="color: red;"></span><br>
+        <label for="mood">Mood:</label>
+        <select name="mood">
+            <option value="1">Hearty</option>
+            <option value="2">Light</option>
+            <option value="3">Romantic</option>
+            <option value="4">Period Cravings</option>
+            <option value="5">Healthy</option>
+            <option value="6">Comforting</option>
+            <option value="7">Spicy</option>
+            <option value="8">Easy</option>
+            <option value="9">Clean</option>
+            <!-- add more options as needed -->
+        </select><br>
+        <label for="steps">Steps (one per line):</label>
+        <div id="steps-container">
+            <div>
+                <label class="step-label">1.</label>
+                <textarea name="steps[]" rows="1" required></textarea>
+                <button type="button" onclick="removeStepField(this)">Remove</button>
+            </div>
+        </div>
+        <button type="button" onclick="addStepField()">Add Step</button><br>
+
+
+        <h2>Ingredients</h2>
+        <div id="ingredient-container">
+            <!-- Initial set of fields for ingredients -->
+            <div class="ingredient-entry">
+                <label class="ingredient-label">1.</label>
+                <div class="ingredient-fields">
+                    <label for="ingredient">Ingredient:</label>
+                    <input type="text" name="ingredients[]" required>
+                </div>
+
+                <div class="ingredient-fields">
+                    <label for="quantity">Quantity:</label>
+                    <input type="text" name="quantities[]" required>
+                </div>
+
+                <div class="ingredient-fields">
+                    <label for="unit">Unit:</label>
+                    <input type="text" name="units[]" required>
+                </div>
+            </div>
+
+            <!-- Additional sets of fields for ingredients can be added similarly -->
+        </div>
+
+
+        <button type="button" onclick="addIngredientField()">Add Ingredient</button><br>
+
+        <input type="submit" value="Add Recipe">
+        <!-- final message -->
+        <div id="completion-message" style="display: none;">
+            <p style="color: green; font-weight: bold;">Recipe added successfully!</p>
+        </div>
+
+    </form>
+</body>
+
+</html>
