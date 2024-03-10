@@ -12,9 +12,9 @@ The original scope of this project is to create a simple front-end application w
 3. View all recipes in a "cookbook" format
 
 Now, upon building the basic framework in such short time, I have added some new goals for the project:
-4. Clean inputs and use NLP to parse the recipe instructions into steps
-5. Connect to an LLM API to describe the mood and desires and have a recipe recommendation to be added to the cookbook
-6. Filter by cuisines
-7. User Account interface so each account can save recipes to their cookbook, add recipes to master database
+1. Clean inputs and use NLP to parse the recipe instructions into steps
+2. Connect to an LLM API to describe the mood and desires and have a recipe recommendation to be added to the cookbook
+3. Filter by cuisines
+4. User Account interface so each account can save recipes to their cookbook, add recipes to master database
 
 I'm sure the list will keep growing. Stay tuned! 
